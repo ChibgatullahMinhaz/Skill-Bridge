@@ -1,0 +1,60 @@
+{
+  "name": "Backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "tsx --test src/lib/auth-policy.test.ts src/lib/auth.integration.test.ts",
+    "typecheck": "tsc --noEmit",
+    "db:validate": "prisma validate --config prisma7.config.ts",
+    "db:generate": "prisma generate --config prisma7.config.ts",
+    "db:migrate": "prisma migrate dev --config prisma7.config.ts",
+    "db:deploy": "prisma migrate deploy --config prisma7.config.ts",
+    "db:format": "prisma format --config prisma7.config.ts",
+    "db:studio": "prisma studio --config prisma7.config.ts",
+    "db:push": "prisma db push --config prisma7.config.ts",
+    "db:seed": "tsx src/script/seedAdmin.ts",
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc --noEmit && tsup src/server.ts --format esm --clean",
+    "start": "node dist/server.js",
+    "preview": "node dist/server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devEngines": {
+    "packageManager": {
+      "name": "pnpm",
+      "version": "^12.6.0",
+      "onFail": "download"
+    }
+  },
+  "type": "module",
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/multer": "^2.2.0",
+    "@types/node": "^26.6.2",
+    "@types/pg": "^8.23.1",
+    "add": "^2.0.9",
+    "pnpm": "^12.5.1",
+    "prisma": "^7.10.0",
+    "tsup": "^8.5.1",
+    "tsx": "^4.23.13",
+    "typescript": "^7.0.2"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.1139.0",
+    "@aws-sdk/s3-request-presigner": "^3.1139.0",
+    "@prisma/adapter-pg": "^7.10.0",
+    "@prisma/client": "^7.10.0",
+    "better-auth": "^1.7.5",
+    "cors": "^2.8.6",
+    "dotenv": "^18.0.1",
+    "express": "^5.2.1",
+    "http-status": "^2.1.0",
+    "multer": "^2.4.0",
+    "pg": "^8.23.0",
+    "zod": "^4.6.5"
+  }
+}

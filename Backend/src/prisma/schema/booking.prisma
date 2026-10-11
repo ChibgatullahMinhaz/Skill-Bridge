@@ -1,0 +1,52 @@
+model AvailabilitySlot {
+  id        String       @id @default(cuid())
+  tutorId   String
+  tutor     TutorProfile @relation(fields: [tutorId], references: [id], onDelete: Restrict)
+  startsAt  DateTime     @db.Timestamptz(3)
+  endsAt    DateTime     @db.Timestamptz(3)
+  bookings  Booking[]
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+
+  @@unique([id, tutorId])
+  @@unique([tutorId, startsAt, endsAt])
+  @@index([tutorId, startsAt])
+  @@map("availabilitySlot")
+}
+
+model Booking {
+  id         String           @id @default(cuid())
+  studentId  String
+  student    User             @relation(fields: [studentId], references: [id], onDelete: Restrict)
+  tutorId    String
+  tutor      TutorProfile     @relation(fields: [tutorId], references: [id], onDelete: Restrict)
+  slotId     String
+  slot       AvailabilitySlot @relation(fields: [slotId, tutorId], references: [id, tutorId], onDelete: Restrict)
+  status     BookingStatus    @default(CONFIRMED)
+  totalPrice Decimal          @db.Decimal(10, 2)
+  review     Review?
+  createdAt  DateTime         @default(now())
+  updatedAt  DateTime         @updatedAt
+
+  @@index([studentId, createdAt])
+  @@index([tutorId, status])
+  @@index([slotId, status])
+  @@unique([id, tutorId])
+  @@map("booking")
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  bookingId String   @unique
+  tutorId   String
+  tutor     TutorProfile @relation(fields: [tutorId], references: [id], onDelete: Restrict)
+  booking   Booking  @relation(fields: [bookingId, tutorId], references: [id, tutorId], onDelete: Restrict)
+  rating    Int
+  comment   String   @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([tutorId, createdAt])
+  @@unique([bookingId, tutorId])
+  @@map("review")
+}

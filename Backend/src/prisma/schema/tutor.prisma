@@ -1,0 +1,27 @@
+model TutorProfile {
+  id           String   @id @default(cuid())
+  userId       String   @unique
+  user         User     @relation(fields: [userId], references: [id], onDelete: Restrict)
+  headline     String
+  bio          String   @db.Text
+  hourlyRate   Decimal  @db.Decimal(10, 2)
+  subjects     TutorSubject[]
+  availability AvailabilitySlot[]
+  bookings     Booking[]
+  reviews      Review[]
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@map("tutorProfile")
+}
+
+model TutorSubject {
+  tutorId    String
+  tutor      TutorProfile @relation(fields: [tutorId], references: [id], onDelete: Cascade)
+  categoryId String
+  category   Category     @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+
+  @@id([tutorId, categoryId])
+  @@index([categoryId])
+  @@map("tutorSubject")
+}
